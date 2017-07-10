@@ -47,10 +47,8 @@ public class Method_02_Test {
         
         public String format (){
         	String x;
-        	int y;
-        	List<Person> people = findAll();
-        	y = people.size();
-        	x = "DaoA [ " +y + " persons]";
+
+        	x = "DaoA[" + findAll().size() + " persons]";
         	return x;
         }
     
@@ -66,6 +64,6 @@ public class Method_02_Test {
         // TODO invoquer la méthode format() pour que le test soit passant
         String result = null;
         result = daoA.format();
-        "DaoA[20 persons]".equals(result);
+        assert "DaoA[20 persons]".equals(result);
     }
 }
