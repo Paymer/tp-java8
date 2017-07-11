@@ -10,6 +10,8 @@ import org.junit.Test;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import static java.util.stream.Collectors.*;
 
 import static org.hamcrest.Matchers.*;
@@ -26,7 +28,10 @@ public class Stream_03_Test {
         List<Customer> customers = new Data().getCustomers();
 
         // TODO construire une chaîne contenant les prénoms des clients triés et séparé par le caractère "|"
-        String result = null;
+        String result = customers.stream()
+        		.map(p -> p.getFirstname())
+        		.sorted()
+        		.collect(Collectors.joining("|"));;
 
         assertThat(result, is("Alexandra|Cyril|Johnny|Marion|Sophie"));
     }
@@ -37,7 +42,8 @@ public class Stream_03_Test {
         List<Order> orders = new Data().getOrders();
 
         // TODO construire une Map <Client, Commandes effectuées par le client
-        Map<Customer, List<Order>> result = null;
+        Map<Customer, List<Order>> result = orders.stream()
+        		.collect(Collectors.groupingBy(p->p.getCustomer()));
 
         assertThat(result.size(), is(2));
         assertThat(result.get(new Customer(1)), hasSize(4));
@@ -63,7 +69,11 @@ public class Stream_03_Test {
         List<Customer> customers = new Data().getCustomers();
 
         // TODO Construire la map Sexe -> Chaîne représentant les prénoms des clients
-        Map<Gender, String> result = null;
+        Map<Gender, String> result = customers.stream().sorted(Comparator.comparing(Customer::getFirstname))
+        		.collect(Collectors.groupingBy(Customer::getGender,
+        				Collectors.mapping(Customer::getFirstname, Collectors.joining("|"))));
+        		
+        		
 
         assertThat(result.get(Gender.F), is("Alexandra|Marion|Sophie"));
         assertThat(result.get(Gender.M), is("Cyril|Johnny"));
